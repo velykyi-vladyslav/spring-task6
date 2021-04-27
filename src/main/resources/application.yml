@@ -6,3 +6,10 @@ management:
     endpoint:
       health:
         show-details: always
+info:
+  app:
+    project-name: "Task4-application"
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      source: "@java.version@"
+      target: "@java.version@"
