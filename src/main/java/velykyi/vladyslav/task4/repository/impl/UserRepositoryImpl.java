@@ -1,6 +1,7 @@
 package velykyi.vladyslav.task4.repository.impl;
 
 import org.springframework.stereotype.Component;
+import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
 import velykyi.vladyslav.task4.model.User;
 import velykyi.vladyslav.task4.repository.UserRepository;
 
@@ -32,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository{
         if (isDeleted) {
             list.add(user);
         } else {
-            throw new RuntimeException("User does not exists");
+            throw new EmployeeNotFoundException();
         }
         return user;
     }

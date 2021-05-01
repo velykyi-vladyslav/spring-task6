@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import velykyi.vladyslav.task4.controller.assembler.EmployeeAssembler;
+import velykyi.vladyslav.task4.controller.model.EmployeeModel;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.service.EmployeeService;
 
@@ -14,31 +16,35 @@ import javax.validation.constraints.Size;
 
 @Slf4j
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("api/v1/employees")
 @RequiredArgsConstructor
 @Validated
 public class EmployeeController {
     private final EmployeeService employeeService;
+    private final EmployeeAssembler employeeAssembler;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{login}")
-    public EmployeeDto getEmployee(@PathVariable String login) {
+    public EmployeeModel getEmployee(@PathVariable String login) {
         log.info("Get employee by login: " + login);
-        return employeeService.getEmployee(login);
+        EmployeeDto employeeDto = employeeService.getEmployee(login);
+        return employeeAssembler.toModel(employeeDto);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public EmployeeDto createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
+    public EmployeeModel createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         log.info("Create employee: {}", employeeDto);
-        return employeeService.createEmployee(employeeDto);
+        EmployeeDto employee = employeeService.createEmployee(employeeDto);
+        return employeeAssembler.toModel(employee);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{login}")
-    public EmployeeDto updateEmployee(@PathVariable String login, @RequestBody EmployeeDto employeeDto) {
+    public EmployeeModel updateEmployee(@PathVariable String login, @RequestBody EmployeeDto employeeDto) {
         log.info("Update employee: {}", employeeDto + " by login: " + login);
-        return employeeService.updateEmployee(login, employeeDto);
+        EmployeeDto employee = employeeService.updateEmployee(login, employeeDto);
+        return employeeAssembler.toModel(employee);
     }
 
     //demonstration @Validated

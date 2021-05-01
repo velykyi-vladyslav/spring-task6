@@ -2,6 +2,7 @@ package velykyi.vladyslav.task4.repository.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
 import velykyi.vladyslav.task4.model.Employee;
 import velykyi.vladyslav.task4.repository.EmployeeRepository;
 
@@ -19,7 +20,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return list.stream()
                 .filter(employee -> employee.getLogin().equals(login))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
     @Override

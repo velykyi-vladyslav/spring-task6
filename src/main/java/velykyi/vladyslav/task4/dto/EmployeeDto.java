@@ -1,8 +1,6 @@
 package velykyi.vladyslav.task4.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -20,7 +18,8 @@ public class EmployeeDto {
     // Contain at least one digit;
     // Contain at least one lower/upper case character;
     // Contain at least on special character from [ @ # $ % ! . ].
-    @Pattern(regexp = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{4,16})")
+    @Pattern(regexp = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{4,16})",
+            message = "login does not match the pattern")
     private String password;
     @Size(min = 2, max = 20, message = "login must be between 2 and 20 characters")
     @NonNull
