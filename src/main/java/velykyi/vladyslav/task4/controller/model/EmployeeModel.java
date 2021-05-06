@@ -12,6 +12,6 @@ import velykyi.vladyslav.task4.dto.EmployeeDto;
 @AllArgsConstructor
 public class EmployeeModel extends RepresentationModel<EmployeeModel> {
 
-    @JsonUnwrapped
-    private EmployeeDto employeeDto;
+        @JsonUnwrapped
+        private EmployeeDto employeeDto;
 }

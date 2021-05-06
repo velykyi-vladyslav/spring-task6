@@ -2,9 +2,11 @@ package velykyi.vladyslav.task4.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import velykyi.vladyslav.task4.controller.assembler.EmployeeAssembler;
 import velykyi.vladyslav.task4.controller.model.EmployeeModel;
@@ -13,6 +15,8 @@ import velykyi.vladyslav.task4.service.EmployeeService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Slf4j
 @RestController
@@ -54,4 +58,11 @@ public class EmployeeController {
         employeeService.deleteEmployee(login);
         return ResponseEntity.noContent().build();
     }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+
 }
