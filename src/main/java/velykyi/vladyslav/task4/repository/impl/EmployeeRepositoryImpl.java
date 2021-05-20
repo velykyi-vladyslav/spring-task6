@@ -11,11 +11,11 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class EmployeeRepositoryImpl implements EmployeeRepository {
+public class EmployeeRepositoryImpl {
 
     private List<Employee> list = new ArrayList<>();
 
-    @Override
+
     public Employee getEmployee(String login){
         return list.stream()
                 .filter(employee -> employee.getLogin().equals(login))
@@ -23,13 +23,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 .orElseThrow(EmployeeNotFoundException::new);
     }
 
-    @Override
+
     public Employee createEmployee(Employee employee) {
         list.add(employee);
         return employee;
     }
 
-    @Override
+
     public Employee updateEmployee(String login, Employee employee) {
         boolean isDeleted = list.removeIf(e -> e.getLogin().equals(login));
         if (isDeleted) {
@@ -40,7 +40,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return employee;
     }
 
-    @Override
+
     public void deleteEmployee(String login) {
         list.removeIf(employee -> employee.getLogin().equals(login));
     }

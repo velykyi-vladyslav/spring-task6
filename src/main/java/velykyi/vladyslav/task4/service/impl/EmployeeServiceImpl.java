@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
+import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
 import velykyi.vladyslav.task4.model.Employee;
 import velykyi.vladyslav.task4.repository.EmployeeRepository;
-import velykyi.vladyslav.task4.service.EmployeeMapper;
+import velykyi.vladyslav.task4.service.mapper.EmployeeMapper;
 import velykyi.vladyslav.task4.service.EmployeeService;
 
 
@@ -20,36 +21,49 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getEmployee(String login) {
-        Employee employee = employeeRepository.getEmployee(login);
-        log.info("getEmployee by email: {}", employee);
+        Employee employee = employeeRepository.findByLogin(login).orElseThrow(EmployeeNotFoundException::new);
+        log.info("getEmployee by login: {}", employee);
         return mapEmployeeToEmployeeDto(employee);
     }
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+        log.info("createEmployee: {}", employeeDto);
         Employee employee = mapEmployeeDtoToEmployee(employeeDto);
-        employee = employeeRepository.createEmployee(employee);
-        log.info("createEmployee: {}", employee);
+
+        employee = employeeRepository.save(employee);
+
         return mapEmployeeToEmployeeDto(employee);
     }
 
     @Override
     public void deleteEmployee(String login) {
         log.info("deleteEmployee by login: {}", login);
-        employeeRepository.deleteEmployee(login);
+
+        Employee employee = employeeRepository.findByLogin(login)
+                .orElseThrow(EmployeeNotFoundException::new);
+        employeeRepository.delete(employee);
     }
 
     @Override
     public EmployeeDto updateEmployee(String login, EmployeeDto employeeDto) {
         Employee employee = mapEmployeeDtoToEmployee(employeeDto);
-        employee = employeeRepository.updateEmployee(login, employee);
         log.info("updateEmployee by login: {}", login + " ; updated employee: " + employee);
-        return  mapEmployeeToEmployeeDto(employee);
+
+        if (!employeeRepository.existsByLogin(login)) {
+            log.error("employee is not exists with this login: {}", login);
+            throw new EmployeeNotFoundException();
+        }
+
+        employee = employeeRepository.save(employee);
+        return mapEmployeeToEmployeeDto(employee);
+
+
     }
 
     private EmployeeDto mapEmployeeToEmployeeDto(Employee employee) {
         log.info("Mapping [Employee] to [EmployeeDTO]");
-       return mapper.employeeToEmployeeDto(employee);
+        return mapper.employeeToEmployeeDto(employee);
 //        return EmployeeDto.builder()
 //                .login(employee.getLogin())
 //                .password(employee.getPassword())

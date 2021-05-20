@@ -1,4 +1,4 @@
-package velykyi.vladyslav.task4.service;
+package velykyi.vladyslav.task4.service.mapper;
 
 import org.mapstruct.Mapper;
 import velykyi.vladyslav.task4.dto.EmployeeDto;

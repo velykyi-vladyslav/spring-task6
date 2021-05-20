@@ -13,3 +13,11 @@ info:
     java:
       source: "@java.version@"
       target: "@java.version@"
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/cash_register"
+    username: "velykyi"
+    password: "1928528375"
+  jpa:
+    database-platform: "org.hibernate.dialect.MySQL5InnoDBDialect"
+    show-sql: true
