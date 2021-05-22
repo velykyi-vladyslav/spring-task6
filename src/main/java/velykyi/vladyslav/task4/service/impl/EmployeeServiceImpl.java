@@ -1,8 +1,10 @@
 package velykyi.vladyslav.task4.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
@@ -14,10 +16,15 @@ import velykyi.vladyslav.task4.service.EmployeeService;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private EmployeeMapper mapper = Mappers.getMapper(EmployeeMapper.class);
+
+    @Autowired
+    private  EmployeeMapper employeeMapper;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     @Override
     public EmployeeDto getEmployee(String login) {
@@ -63,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeDto mapEmployeeToEmployeeDto(Employee employee) {
         log.info("Mapping [Employee] to [EmployeeDTO]");
-        return mapper.employeeToEmployeeDto(employee);
+        return employeeMapper.employeeToEmployeeDto(employee);
 //        return EmployeeDto.builder()
 //                .login(employee.getLogin())
 //                .password(employee.getPassword())
@@ -76,14 +83,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private Employee mapEmployeeDtoToEmployee(EmployeeDto employeeDto) {
         log.info("Mapping [EmployeeDTO] to [Employee]");
-        return mapper.employeeDtoToEmployee(employeeDto);
+        return employeeMapper.employeeDtoToEmployee(employeeDto);
 //        return Employee.builder()
 //                .login(employeeDto.getLogin())
 //                .password(employeeDto.getPassword())
 //                .firstName(employeeDto.getFirstName())
 //                .lastName(employeeDto.getLastName())
 //                .localeId(Integer.parseInt(employeeDto.getLocaleId()))
-//                .roleId(Integer.parseInt(employeeDto.getRoleId()))
+//                .parentRole(getRole(employeeDto.getParentRole()))
 //                .build();
     }
+
+
 }

@@ -1,0 +1,24 @@
+drop schema if exists cash_register;
+CREATE SCHEMA IF NOT EXISTS cash_register DEFAULT CHARACTER SET utf8;
+USE cash_register;
+
+create table cash_register.`role`(
+id int auto_increment primary key,
+name varchar(30) not null unique
+);
+
+create table cash_register.locales(
+id int auto_increment primary key,
+language varchar(50) not null
+);
+
+create table cash_register.employee(
+ id int auto_increment primary key,
+ login varchar(20) not null unique,
+ password varchar(20) not null unique,
+ first_name varchar(20),
+ last_name varchar(20),
+ role_id int not null,
+ locale_id int,
+ foreign key (role_id) references `role`(id) on delete cascade on update restrict
+);

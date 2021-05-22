@@ -3,6 +3,7 @@ package velykyi.vladyslav.task4.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NonNull;
+import velykyi.vladyslav.task4.model.Role;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -27,7 +28,7 @@ public class EmployeeDto {
     @Size(min = 2, max = 20, message = "login must be between 2 and 20 characters")
     @NonNull
     private String lastName;
-    private String roleId;
+    private RoleDto parentRole;
     private String localeId;
 
     public EmployeeDto(@Size(min = 2, max = 10,
@@ -37,12 +38,12 @@ public class EmployeeDto {
                        @Size(min = 2, max = 20, message = "login must be between 2 and 20 characters")
                        @NonNull String firstName,
                        @Size(min = 2, max = 20, message = "login must be between 2 and 20 characters")
-                       @NonNull String lastName, String roleId, String localeId) {
+                       @NonNull String lastName, RoleDto parentRole, String localeId) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roleId = roleId;
+        this.parentRole = parentRole;
         this.localeId = localeId;
     }
 }

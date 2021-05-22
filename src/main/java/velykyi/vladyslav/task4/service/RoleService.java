@@ -1,9 +1,12 @@
 package velykyi.vladyslav.task4.service;
 
 import velykyi.vladyslav.task4.dto.RoleDto;
+import velykyi.vladyslav.task4.model.Role;
 
 public interface RoleService {
-    RoleDto getRole(String name);
+    RoleDto getRoleDto(String name);
+
+    Role getRole(String name);
 
     RoleDto createRole(RoleDto roleDto);
 

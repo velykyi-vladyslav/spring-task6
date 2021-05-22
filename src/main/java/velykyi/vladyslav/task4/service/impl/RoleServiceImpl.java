@@ -19,11 +19,19 @@ public class RoleServiceImpl implements RoleService {
     private RoleMapper mapper = Mappers.getMapper(RoleMapper.class);
 
     @Override
-    public RoleDto getRole(String name) {
+    public RoleDto getRoleDto(String name) {
         Role role = roleRepository.findByName(name).orElseThrow(RoleNotFoundException::new);
         log.info("getRole by login: {}", role);
 
         return mapRoleToRoleDto(role);
+    }
+
+    @Override
+    public Role getRole(String name) {
+        Role role = roleRepository.findByName(name).orElseThrow(RoleNotFoundException::new);
+        log.info("getRole by login: {}", role);
+
+        return role;
     }
 
     @Override

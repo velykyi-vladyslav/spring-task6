@@ -2,6 +2,7 @@ package velykyi.vladyslav.task4.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import velykyi.vladyslav.task4.controller.assembler.RoleAssembler;
 import velykyi.vladyslav.task4.controller.model.RoleModel;
 import velykyi.vladyslav.task4.dto.RoleDto;
 import velykyi.vladyslav.task4.service.RoleService;
+import velykyi.vladyslav.task4.service.mapper.RoleMapper;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
@@ -23,12 +25,14 @@ import java.util.Date;
 public class RoleController {
     private final RoleService roleService;
     private final RoleAssembler roleAssembler;
+    private RoleMapper mapper = Mappers.getMapper(RoleMapper.class);
+
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{name}")
     public RoleModel getRole(@PathVariable String name) {
         log.info("Get role by login: " + name);
-        RoleDto roleDto = roleService.getRole(name);
+        RoleDto roleDto = roleService.getRoleDto(name);
 
         return roleAssembler.toModel(roleDto);
     }

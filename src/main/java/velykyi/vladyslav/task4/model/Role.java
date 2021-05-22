@@ -3,6 +3,7 @@ package velykyi.vladyslav.task4.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -14,15 +15,10 @@ public class Role {
     private Long id;
     @Column(unique = true)
     private String name;
-//    @OneToMany(mappedBy = "role")
-//    private Set<Employee> employees;
+    @OneToMany(mappedBy = "parentRole")
+    private List<Employee> employees;
 
     public Role() {
     }
 
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
-//        this.employees = employees;
-    }
 }

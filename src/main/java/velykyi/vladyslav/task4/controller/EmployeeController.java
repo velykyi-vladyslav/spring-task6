@@ -1,6 +1,5 @@
 package velykyi.vladyslav.task4.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
@@ -21,11 +20,15 @@ import java.util.Date;
 @Slf4j
 @RestController
 @RequestMapping("api/v1/employees")
-@RequiredArgsConstructor
 @Validated
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeAssembler employeeAssembler;
+
+    public EmployeeController(EmployeeService employeeService, EmployeeAssembler employeeAssembler) {
+        this.employeeService = employeeService;
+        this.employeeAssembler = employeeAssembler;
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{login}")
@@ -40,6 +43,7 @@ public class EmployeeController {
     public EmployeeModel createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         log.info("Create employee: {}", employeeDto);
         EmployeeDto employee = employeeService.createEmployee(employeeDto);
+        log.info("Created employee: {}", employee);
         return employeeAssembler.toModel(employee);
     }
 
