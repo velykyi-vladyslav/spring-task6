@@ -8,5 +8,5 @@ import velykyi.vladyslav.task4.model.Role;
 @Mapper(componentModel = "spring",  injectionStrategy = InjectionStrategy.FIELD)
 public interface RoleMapper {
     RoleDto roleToRoleDto(Role role);
-    Role roleDtoToRole(RoleDto RoleDto);
+    Role roleDtoToRole(RoleDto roleDto);
 }

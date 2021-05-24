@@ -12,4 +12,5 @@ public abstract class ReceiptMapper {
     abstract public ReceiptDto receiptToReceiptDto(Receipt receipt);
 
     abstract public Receipt receiptDtoToReceipt(ReceiptDto receipt);
+
 }

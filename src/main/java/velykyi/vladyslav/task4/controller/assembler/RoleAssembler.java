@@ -7,6 +7,7 @@ import velykyi.vladyslav.task4.controller.RoleController;
 import velykyi.vladyslav.task4.controller.model.RoleModel;
 import velykyi.vladyslav.task4.dto.RoleDto;
 
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -27,8 +28,14 @@ public class RoleAssembler extends RepresentationModelAssemblerSupport<RoleDto, 
         Link delete = linkTo(methodOn(RoleController.class)
                 .deleteRole(entity.getName()))
                 .withRel("delete");
+        Link update = linkTo(methodOn(RoleController.class)
+                .updateRole(entity.getName(), entity))
+                .withRel("update");
+        Link create = linkTo(methodOn(RoleController.class)
+                .createRole(entity))
+                .withRel("create");
 
-        roleModel.add(get, delete);
+        roleModel.add(get, delete, update, create);
 
         return roleModel;
     }

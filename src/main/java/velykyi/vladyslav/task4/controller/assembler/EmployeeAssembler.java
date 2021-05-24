@@ -26,8 +26,14 @@ public class EmployeeAssembler extends RepresentationModelAssemblerSupport<Emplo
         Link delete = linkTo(methodOn(EmployeeController.class)
                 .deleteEmployee(entity.getLogin()))
                 .withRel("delete");
+        Link update = linkTo(methodOn(EmployeeController.class)
+                .updateEmployee(entity.getLogin(), entity))
+                .withRel("update");
+        Link create = linkTo(methodOn(EmployeeController.class)
+                .createEmployee(entity))
+                .withRel("create");
 
-        employeeModel.add(get, delete);
+        employeeModel.add(get, delete, update, create);
 
         return employeeModel;
     }
