@@ -1,10 +1,7 @@
 package velykyi.vladyslav.task4.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
@@ -16,59 +13,49 @@ import velykyi.vladyslav.task4.service.EmployeeService;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-
-    @Autowired
-    private  EmployeeMapper employeeMapper;
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    private EmployeeMapper employeeMapper;
 
     @Override
     public EmployeeDto getEmployee(String login) {
+        log.info("getEmployee by login: {}", login);
         Employee employee = employeeRepository.findByLogin(login).orElseThrow(EmployeeNotFoundException::new);
-        log.info("getEmployee by login: {}", employee);
-        return mapEmployeeToEmployeeDto(employee);
+
+        return map(employee);
     }
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
         log.info("createEmployee: {}", employeeDto);
-        Employee employee = mapEmployeeDtoToEmployee(employeeDto);
+        Employee employee = employeeRepository.save(map(employeeDto));
 
-        employee = employeeRepository.save(employee);
-
-        return mapEmployeeToEmployeeDto(employee);
+        return map(employee);
     }
 
     @Override
     public void deleteEmployee(String login) {
         log.info("deleteEmployee by login: {}", login);
 
-        Employee employee = employeeRepository.findByLogin(login)
-                .orElseThrow(EmployeeNotFoundException::new);
+        Employee employee = employeeRepository.findByLogin(login).orElseThrow(EmployeeNotFoundException::new);
         employeeRepository.delete(employee);
     }
 
     @Override
     public EmployeeDto updateEmployee(String login, EmployeeDto employeeDto) {
-        Employee employee = mapEmployeeDtoToEmployee(employeeDto);
-        log.info("updateEmployee by login: {}", login + " ; updated employee: " + employee);
+        log.info("updateEmployee by login: {}", login + " ; employeeDto for update: " + employeeDto);
 
         if (!employeeRepository.existsByLogin(login)) {
             log.error("employee is not exists with this login: {}", login);
             throw new EmployeeNotFoundException();
         }
 
-        employee = employeeRepository.save(employee);
-        return mapEmployeeToEmployeeDto(employee);
-
-
+        Employee employee = employeeRepository.save(map(employeeDto));
+        return map(employee);
     }
 
-    private EmployeeDto mapEmployeeToEmployeeDto(Employee employee) {
+    private EmployeeDto map(Employee employee) {
         log.info("Mapping [Employee] to [EmployeeDTO]");
         return employeeMapper.employeeToEmployeeDto(employee);
 //        return EmployeeDto.builder()
@@ -81,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                .build();
     }
 
-    private Employee mapEmployeeDtoToEmployee(EmployeeDto employeeDto) {
+    private Employee map(EmployeeDto employeeDto) {
         log.info("Mapping [EmployeeDTO] to [Employee]");
         return employeeMapper.employeeDtoToEmployee(employeeDto);
 //        return Employee.builder()

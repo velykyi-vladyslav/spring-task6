@@ -20,16 +20,16 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDto getRoleDto(String name) {
+        log.info("getRoleDto by name: {}", name);
         Role role = roleRepository.findByName(name).orElseThrow(RoleNotFoundException::new);
-        log.info("getRole by login: {}", role);
 
-        return mapRoleToRoleDto(role);
+        return map(role);
     }
 
     @Override
     public Role getRole(String name) {
+        log.info("getRole by name: {}", name);
         Role role = roleRepository.findByName(name).orElseThrow(RoleNotFoundException::new);
-        log.info("getRole by login: {}", role);
 
         return role;
     }
@@ -37,43 +37,39 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDto createRole(RoleDto roleDto) {
         log.info("createRole, roleDto: {}", roleDto);
-        Role role = mapRoleDtoToRole(roleDto);
-        role = roleRepository.save(role);
+        Role role = roleRepository.save(map(roleDto));
 
-        return mapRoleToRoleDto(role);
+        return map(role);
     }
 
     @Override
     public void deleteRole(String name) {
         log.info("deleteRole by name: {}", name);
-        Role role = roleRepository.findByName(name)
-                .orElseThrow(RoleNotFoundException::new);
+        Role role = roleRepository.findByName(name).orElseThrow(RoleNotFoundException::new);
+
         roleRepository.delete(role);
     }
 
     @Override
     public RoleDto updateRole(String name, RoleDto roleDto) {
-        Role role = mapRoleDtoToRole(roleDto);
-        log.info("updateRole by name: {}", name + " ; updated role: " + role);
+        log.info("updateRole by name: {}", name + " ; roleDto for update: " + roleDto);
 
         if (!roleRepository.existsByName(name)) {
             log.error("role is not exists with this name: {}", name);
             throw new RoleNotFoundException();
         }
 
-        role = roleRepository.save(role);
-        return mapRoleToRoleDto(role);
+        Role role = roleRepository.save(map(roleDto));
+        return map(role);
     }
 
-    private RoleDto mapRoleToRoleDto(Role role) {
+    private RoleDto map(Role role) {
         log.info("Mapping [Role] to [RoleDTO]");
         return mapper.roleToRoleDto(role);
-
     }
 
-    private Role mapRoleDtoToRole(RoleDto roleDto) {
+    private Role map(RoleDto roleDto) {
         log.info("Mapping [RoleDTO] to [Role]");
         return mapper.roleDtoToRole(roleDto);
-
     }
 }
