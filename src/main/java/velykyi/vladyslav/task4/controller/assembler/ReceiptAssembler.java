@@ -4,7 +4,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 import velykyi.vladyslav.task4.controller.ReceiptController;
-import velykyi.vladyslav.task4.controller.RoleController;
 import velykyi.vladyslav.task4.controller.model.ReceiptModel;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
 
@@ -30,11 +29,9 @@ public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receip
         Link update = linkTo(methodOn(ReceiptController.class)
                 .updateReceipt(entity.getId(), entity))
                 .withRel("update");
-        Link create = linkTo(methodOn(ReceiptController.class)
-                .createReceipt(entity))
-                .withRel("create");
 
-        receiptModel.add(get, delete, update, create);
+
+        receiptModel.add(get, delete, update);
 
         return receiptModel;
     }

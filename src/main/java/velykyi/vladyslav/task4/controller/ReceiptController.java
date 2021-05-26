@@ -45,11 +45,9 @@ public class ReceiptController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ReceiptModel createReceipt(@Valid @RequestBody ReceiptDto receiptDto) {
-        log.info("Create receipt: {}", receiptDto);
-        ReceiptDto receipt = receiptService.createReceipt(receiptDto);
-
-        return receiptAssembler.toModel(receipt);
+    public ReceiptDto createReceipt() {
+        log.info("Create receipt");
+        return receiptService.createReceipt();
     }
 
     @ResponseStatus(HttpStatus.OK)

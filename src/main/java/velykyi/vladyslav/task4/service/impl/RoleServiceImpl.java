@@ -3,6 +3,7 @@ package velykyi.vladyslav.task4.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.RoleDto;
 import velykyi.vladyslav.task4.exceptions.RoleNotFoundException;

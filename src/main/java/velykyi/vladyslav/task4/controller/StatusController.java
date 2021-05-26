@@ -13,6 +13,7 @@ import velykyi.vladyslav.task4.controller.assembler.StatusAssembler;
 import velykyi.vladyslav.task4.controller.model.RoleModel;
 import velykyi.vladyslav.task4.controller.model.StatusModel;
 import velykyi.vladyslav.task4.dto.StatusDto;
+import velykyi.vladyslav.task4.model.Status;
 import velykyi.vladyslav.task4.service.StatusService;
 import velykyi.vladyslav.task4.service.mapper.StatusMapper;
 
@@ -31,11 +32,11 @@ public class StatusController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{name}")
-    public StatusModel getStatus(@PathVariable String name) {
+    public Status getStatus(@PathVariable String name) {
         log.info("Get status by name: " + name);
-        StatusDto statusDto = statusService.getStatusDto(name);
+        //StatusDto statusDto = statusService.getStatusDto(name);
 
-        return statusAssembler.toModel(statusDto);
+        return statusService.getStatus(name);
     }
 
     @InitBinder

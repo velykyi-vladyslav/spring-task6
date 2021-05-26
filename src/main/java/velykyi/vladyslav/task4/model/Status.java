@@ -15,9 +15,9 @@ public class Status {
     private Long id;
 
     private String name;
-//
-//    @OneToMany(mappedBy = "parentStatus")
-//    private List<Receipt> receipts;
+
+    @OneToMany(mappedBy = "parentStatus")
+    private List<Receipt> receipts;
 
     public Status() {
     }
