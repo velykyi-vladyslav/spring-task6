@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReceiptDto {
-
     @Id
     private Long id;
     @NonNull
     @JsonProperty("bill")
     @JsonSerialize(using = BillSerializer.class)
     private BigDecimal bill;
+    //todo Employee
 
     public ReceiptDto() {
     }

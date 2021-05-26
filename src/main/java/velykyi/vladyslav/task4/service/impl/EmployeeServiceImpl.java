@@ -2,6 +2,7 @@ package velykyi.vladyslav.task4.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.exceptions.EmployeeNotFoundException;
@@ -13,10 +14,10 @@ import velykyi.vladyslav.task4.service.EmployeeService;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private EmployeeMapper employeeMapper;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     public EmployeeDto getEmployee(String login) {

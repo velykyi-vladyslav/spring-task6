@@ -3,6 +3,7 @@ package velykyi.vladyslav.task4.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
@@ -15,10 +16,10 @@ import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReceiptServiceImpl implements ReceiptService {
     private final ReceiptRepository receiptRepository;
-    private ReceiptMapper receiptMapper = Mappers.getMapper(ReceiptMapper.class);
+    private final ReceiptMapper receiptMapper;
 
     @Override
     public ReceiptDto getReceiptDtoById(Long id) {
