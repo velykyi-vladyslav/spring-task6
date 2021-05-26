@@ -2,22 +2,18 @@ package velykyi.vladyslav.task4.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import velykyi.vladyslav.task4.controller.StatusController;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
 import velykyi.vladyslav.task4.exceptions.ReceiptNotFoundException;
 import velykyi.vladyslav.task4.exceptions.RoleNotFoundException;
-import velykyi.vladyslav.task4.exceptions.StatusNotFoundException;
 import velykyi.vladyslav.task4.model.Receipt;
-import velykyi.vladyslav.task4.model.Status;
 import velykyi.vladyslav.task4.repository.ReceiptRepository;
-import velykyi.vladyslav.task4.repository.StatusRepository;
 import velykyi.vladyslav.task4.service.ReceiptService;
 import velykyi.vladyslav.task4.service.StatusService;
 import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
+import velykyi.vladyslav.task4.model.enums.Statuses;
 
 import java.math.BigDecimal;
 
@@ -27,6 +23,9 @@ import java.math.BigDecimal;
 public class ReceiptServiceImpl implements ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final ReceiptMapper receiptMapper;
+    private final StatusService statusService;
+
+
 
 
 
@@ -55,9 +54,11 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public ReceiptDto createReceipt() {
+    public Receipt createNewReceipt() {
         log.info("Service: createReceipt");
-        return saveNewReceipt(new Receipt());
+        Receipt receipt = buildNewReceipt();
+        receiptRepository.save(receipt);
+        return receipt;
     }
 
     @Override
@@ -90,14 +91,11 @@ public class ReceiptServiceImpl implements ReceiptService {
         log.info("Mapping [Receipt] to [ReceiptDTO]");
         return receiptMapper.receiptToReceiptDto(receipt);
     }
-    private ReceiptDto saveNewReceipt(Receipt receipt){
-        //todo change this code
+
+    private Receipt buildNewReceipt() {
+        Receipt receipt = new Receipt();
         receipt.setBill(BigDecimal.ZERO);
-        Status status = new Status();
-        status.setName("created");
-        status.setId(1L);
-        receipt.setParentStatus(status);
-        receiptRepository.save(receipt);
-        return map(receipt);
+        receipt.setParentStatus(statusService.getStatus(Statuses.CREATED));
+        return receipt;
     }
 }

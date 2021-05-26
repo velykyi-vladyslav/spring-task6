@@ -2,36 +2,34 @@ package velykyi.vladyslav.task4.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import velykyi.vladyslav.task4.controller.assembler.ReceiptAssembler;
-import velykyi.vladyslav.task4.controller.assembler.RoleAssembler;
 import velykyi.vladyslav.task4.controller.model.ReceiptModel;
-import velykyi.vladyslav.task4.controller.model.RoleModel;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
-import velykyi.vladyslav.task4.dto.RoleDto;
 import velykyi.vladyslav.task4.model.Receipt;
 import velykyi.vladyslav.task4.service.ReceiptService;
-import velykyi.vladyslav.task4.service.RoleService;
+import velykyi.vladyslav.task4.service.StatusService;
 import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
-import velykyi.vladyslav.task4.service.mapper.RoleMapper;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("api/v1/receipts")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReceiptController {
     private final ReceiptService receiptService;
     private final ReceiptAssembler receiptAssembler;
-    private ReceiptMapper mapper = Mappers.getMapper(ReceiptMapper.class);
+    private final ReceiptMapper receiptMapper;
+    private final StatusService statusService;
 
 
     @ResponseStatus(HttpStatus.OK)
@@ -43,11 +41,22 @@ public class ReceiptController {
         return receiptAssembler.toModel(receiptDto);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{status}")
+    public List<ReceiptModel> getReceipts(@PathVariable String status) {
+        log.info("Get status by name: " + status);
+        //StatusDto statusDto = statusService.getStatusDto(name);
+        //todo for each link
+        return null;//statusService.getStatus(Statuses.valueOf(status));
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ReceiptDto createReceipt() {
-        log.info("Create receipt");
-        return receiptService.createReceipt();
+        log.info("ReceiptController: Create receipt");
+        Receipt receipt = receiptService.createNewReceipt();
+        //TODO CHANGE TO MODEL
+        return receiptMapper.receiptToReceiptDto(receipt);
     }
 
     @ResponseStatus(HttpStatus.OK)

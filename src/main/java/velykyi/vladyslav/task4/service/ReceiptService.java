@@ -13,7 +13,7 @@ public interface ReceiptService {
 
     Receipt getReceipt(Long id);
 
-    ReceiptDto createReceipt();
+    Receipt createNewReceipt();
 
     void deleteReceipt(Long id);
 

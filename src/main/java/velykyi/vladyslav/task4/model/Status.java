@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -17,7 +18,7 @@ public class Status {
     private String name;
 
     @OneToMany(mappedBy = "parentStatus")
-    private List<Receipt> receipts;
+    private Set<Receipt> receipts;
 
     public Status() {
     }

@@ -6,6 +6,7 @@ import velykyi.vladyslav.task4.dto.ReceiptDto;
 import velykyi.vladyslav.task4.dto.StatusDto;
 import velykyi.vladyslav.task4.model.Receipt;
 import velykyi.vladyslav.task4.model.Status;
+import velykyi.vladyslav.task4.model.enums.Statuses;
 import velykyi.vladyslav.task4.service.StatusService;
 
 
@@ -23,7 +24,7 @@ public abstract class ReceiptMapper {
     }
 
     public Status statusToStatusDto(StatusDto parentStatus) {
-        return statusService.getStatus(parentStatus.getName());
+        return statusService.getStatus(Statuses.valueOf(parentStatus.getName()));
     }
 
 }
