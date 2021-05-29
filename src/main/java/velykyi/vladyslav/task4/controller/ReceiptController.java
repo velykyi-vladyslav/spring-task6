@@ -60,12 +60,12 @@ public class ReceiptController {
                 .collect(Collectors.toList());
     }
 
-
-
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}")
     public ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody ReceiptDto receiptDto) {
-        log.info("Update receipt: {}", receiptDto + " by id: " + id);
+        log.info("ReceiptController: Update receipt: {}", receiptDto + " by id: " + id);
+
+        //todo do logic when table receipt-product will be exist
 
         ReceiptDto receipt = receiptService.updateReceipt(id, receiptDto);
         return receiptAssembler.toModel(receipt);
@@ -73,10 +73,20 @@ public class ReceiptController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteReceipt(@Valid @PathVariable Long id) {
-        log.info("Delete receipt by id: " + id);
+        log.info("ReceiptController: Delete receipt by id: " + id);
 
         receiptService.deleteReceipt(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping(value = "/close/{id}")
+    public ReceiptModel closeReceipt(@PathVariable Long id) {
+        log.info("ReceiptController: Close receipt by id: " + id);
+
+        Receipt receipt = receiptService.closeReceipt(id);
+        ReceiptDto receiptDto = receiptMapper.receiptToReceiptDto(receipt);
+        return receiptAssembler.toModel(receiptDto);
     }
 
     @InitBinder

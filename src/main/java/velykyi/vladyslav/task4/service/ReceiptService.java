@@ -11,8 +11,6 @@ public interface ReceiptService {
 
     ReceiptDto getReceiptDtoByEmployee(EmployeeDto employeeDto);
 
-    ReceiptDto getReceiptDtoByStatus(ReceiptDto receiptDto);
-
     Receipt getReceipt(Long id);
 
     List<ReceiptDto> getReceipts(String statusName, int page);
@@ -22,4 +20,6 @@ public interface ReceiptService {
     void deleteReceipt(Long id);
 
     ReceiptDto updateReceipt(Long id, ReceiptDto receiptDto);
+
+    Receipt closeReceipt(Long id);
 }

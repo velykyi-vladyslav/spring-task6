@@ -46,11 +46,6 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public ReceiptDto getReceiptDtoByStatus(ReceiptDto receiptDto) {
-        return null;
-    }
-
-    @Override
     public Receipt getReceipt(Long id) {
         log.info("getReceipt by id: {}", id);
         return receiptRepository.findById(id).orElseThrow(ReceiptNotFoundException::new);
@@ -99,6 +94,18 @@ public class ReceiptServiceImpl implements ReceiptService {
         return map(receipt);
     }
 
+    @Override
+    public Receipt closeReceipt(Long id) {
+        Receipt receipt = receiptRepository
+                .findById(id)
+                .orElseThrow(ReceiptNotFoundException::new);
+        Status status = statusService.getStatus(Statuses.CLOSED);
+
+        receipt.setParentStatus(status);
+        return receipt;
+
+    }
+
     private Receipt map(ReceiptDto receiptDto) {
         log.info("Mapping [ReceiptDTO] to [Receipt]");
         return receiptMapper.receiptDtoToReceipt(receiptDto);
@@ -115,4 +122,5 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setParentStatus(statusService.getStatus(Statuses.CREATED));
         return receipt;
     }
+
 }
