@@ -33,29 +33,25 @@ public class ReceiptController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ReceiptModel createReceipt() {
-        log.info("ReceiptController: Create receipt");
-
         Receipt receipt = receiptService.createNewReceipt();
-        ReceiptDto receiptDto = receiptMapper.receiptToReceiptDto(receipt);
-        return receiptAssembler.toModel(receiptDto);
+
+        return receiptAssembler.toModel(map(receipt));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     public ReceiptModel getReceipt(@PathVariable Long id) {
-        log.info("Get receipt by id: " + id);
+        Receipt receipt = receiptService.getReceiptById(id);
 
-        ReceiptDto receiptDto = receiptService.getReceiptDtoById(id);
-        return receiptAssembler.toModel(receiptDto);
+        return receiptAssembler.toModel(map(receipt));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/status/{status}/{page}")
     public List<ReceiptModel> getReceipts(@PathVariable String status, @PathVariable int page) {
-        log.info("ReceiptController: Get receipt by status name: " + status);
-
-        List<ReceiptDto> receiptDtos = receiptService.getReceipts(status.toUpperCase(), page);
-        return receiptDtos.stream()
+        List<Receipt> receipts = receiptService.getReceipts(status.toUpperCase(), page);
+        return receipts.stream()
+                .map(this::map)
                 .map(receiptAssembler::toModel)
                 .collect(Collectors.toList());
     }
@@ -63,30 +59,33 @@ public class ReceiptController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}")
     public ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody ReceiptDto receiptDto) {
-        log.info("ReceiptController: Update receipt: {}", receiptDto + " by id: " + id);
-
         //todo do logic when table receipt-product will be exist
 
-        ReceiptDto receipt = receiptService.updateReceipt(id, receiptDto);
-        return receiptAssembler.toModel(receipt);
+        Receipt receipt = receiptService.updateReceipt(id, map(receiptDto));
+        return receiptAssembler.toModel(map(receipt));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteReceipt(@Valid @PathVariable Long id) {
-        log.info("ReceiptController: Delete receipt by id: " + id);
-
         receiptService.deleteReceipt(id);
+
         return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(value = "/close/{id}")
     public ReceiptModel closeReceipt(@PathVariable Long id) {
-        log.info("ReceiptController: Close receipt by id: " + id);
-
         Receipt receipt = receiptService.closeReceipt(id);
-        ReceiptDto receiptDto = receiptMapper.receiptToReceiptDto(receipt);
-        return receiptAssembler.toModel(receiptDto);
+
+        return receiptAssembler.toModel(map(receipt));
+    }
+
+    private Receipt map(ReceiptDto receiptDto) {
+        return receiptMapper.receiptDtoToReceipt(receiptDto);
+    }
+
+    private ReceiptDto map(Receipt receipt) {
+        return receiptMapper.receiptToReceiptDto(receipt);
     }
 
     @InitBinder
