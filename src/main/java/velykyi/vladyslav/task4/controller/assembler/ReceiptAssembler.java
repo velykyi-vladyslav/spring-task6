@@ -20,9 +20,6 @@ public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receip
     public ReceiptModel toModel(ReceiptDto entity) {
         ReceiptModel receiptModel = new ReceiptModel(entity);
 
-        Link get = linkTo(methodOn(ReceiptController.class)
-                .getReceipt(entity.getId()))
-                .withRel("get");
         Link delete = linkTo(methodOn(ReceiptController.class)
                 .deleteReceipt(entity.getId()))
                 .withRel("delete");
@@ -31,7 +28,7 @@ public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receip
                 .withRel("update");
 
 
-        receiptModel.add(get, delete, update);
+        receiptModel.add(delete, update);
 
         return receiptModel;
     }
