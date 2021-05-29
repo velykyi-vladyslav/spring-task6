@@ -9,6 +9,7 @@ import velykyi.vladyslav.task4.dto.ReceiptDto;
 import velykyi.vladyslav.task4.exceptions.ReceiptNotFoundException;
 import velykyi.vladyslav.task4.exceptions.RoleNotFoundException;
 import velykyi.vladyslav.task4.model.Receipt;
+import velykyi.vladyslav.task4.model.Status;
 import velykyi.vladyslav.task4.repository.ReceiptRepository;
 import velykyi.vladyslav.task4.service.ReceiptService;
 import velykyi.vladyslav.task4.service.StatusService;
@@ -16,6 +17,8 @@ import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
 import velykyi.vladyslav.task4.model.enums.Statuses;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,9 +27,6 @@ public class ReceiptServiceImpl implements ReceiptService {
     private final ReceiptRepository receiptRepository;
     private final ReceiptMapper receiptMapper;
     private final StatusService statusService;
-
-
-
 
 
     @Override
@@ -51,6 +51,14 @@ public class ReceiptServiceImpl implements ReceiptService {
     public Receipt getReceipt(Long id) {
         log.info("getReceipt by id: {}", id);
         return receiptRepository.findById(id).orElseThrow(ReceiptNotFoundException::new);
+    }
+
+    @Override
+    public List<ReceiptDto> getReceipts(String statusName) {
+        Status status = statusService.getStatus(Statuses.valueOf(statusName));
+        List<Receipt> receipts = receiptRepository.findAllByParentStatus(status);
+        List<ReceiptDto> receiptDtos = receipts.stream().map(this::map).collect(Collectors.toList());
+        return receiptDtos;
     }
 
     @Override

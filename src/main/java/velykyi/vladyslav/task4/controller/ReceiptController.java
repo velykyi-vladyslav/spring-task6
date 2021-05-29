@@ -42,12 +42,12 @@ public class ReceiptController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{status}")
-    public List<ReceiptModel> getReceipts(@PathVariable String status) {
+    @GetMapping(value = "/status/{status}")
+    public List<ReceiptDto> getReceipts(@PathVariable String status) {
         log.info("Get status by name: " + status);
-        //StatusDto statusDto = statusService.getStatusDto(name);
-        //todo for each link
-        return null;//statusService.getStatus(Statuses.valueOf(status));
+
+        //todo for each link, add model
+        return receiptService.getReceipts(status.toLowerCase());
     }
 
     @ResponseStatus(HttpStatus.CREATED)

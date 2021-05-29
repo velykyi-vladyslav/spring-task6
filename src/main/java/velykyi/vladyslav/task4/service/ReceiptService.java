@@ -4,6 +4,8 @@ import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
 import velykyi.vladyslav.task4.model.Receipt;
 
+import java.util.List;
+
 public interface ReceiptService {
     ReceiptDto getReceiptDtoById(Long id);
 
@@ -12,6 +14,8 @@ public interface ReceiptService {
     ReceiptDto getReceiptDtoByStatus(ReceiptDto receiptDto);
 
     Receipt getReceipt(Long id);
+
+    List<ReceiptDto> getReceipts(String statusName);
 
     Receipt createNewReceipt();
 
