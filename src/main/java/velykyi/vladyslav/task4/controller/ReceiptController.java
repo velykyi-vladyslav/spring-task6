@@ -13,7 +13,6 @@ import velykyi.vladyslav.task4.controller.model.ReceiptModel;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
 import velykyi.vladyslav.task4.model.Receipt;
 import velykyi.vladyslav.task4.service.ReceiptService;
-import velykyi.vladyslav.task4.service.StatusService;
 import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
 
 import javax.validation.Valid;
@@ -29,7 +28,6 @@ public class ReceiptController {
     private final ReceiptService receiptService;
     private final ReceiptAssembler receiptAssembler;
     private final ReceiptMapper receiptMapper;
-    private final StatusService statusService;
 
 
     @ResponseStatus(HttpStatus.OK)
@@ -42,12 +40,12 @@ public class ReceiptController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/status/{status}")
-    public List<ReceiptDto> getReceipts(@PathVariable String status) {
+    @GetMapping(value = "/status/{status}/{page}")
+    public List<ReceiptDto> getReceipts(@PathVariable String status, @PathVariable int page) {
         log.info("Get status by name: " + status);
 
         //todo for each link, add model
-        return receiptService.getReceipts(status.toLowerCase());
+        return receiptService.getReceipts(status.toUpperCase(), page);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

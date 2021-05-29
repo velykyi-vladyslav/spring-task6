@@ -15,7 +15,7 @@ public interface ReceiptService {
 
     Receipt getReceipt(Long id);
 
-    List<ReceiptDto> getReceipts(String statusName);
+    List<ReceiptDto> getReceipts(String statusName, int page);
 
     Receipt createNewReceipt();
 

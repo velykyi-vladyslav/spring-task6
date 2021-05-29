@@ -3,6 +3,9 @@ package velykyi.vladyslav.task4.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.EmployeeDto;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
@@ -54,10 +57,16 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public List<ReceiptDto> getReceipts(String statusName) {
+    public List<ReceiptDto> getReceipts(String statusName, int page) {
         Status status = statusService.getStatus(Statuses.valueOf(statusName));
-        List<Receipt> receipts = receiptRepository.findAllByParentStatus(status);
-        List<ReceiptDto> receiptDtos = receipts.stream().map(this::map).collect(Collectors.toList());
+        Pageable firstPageWithTwoElements = PageRequest.of(page, 5, Sort.by("id").descending());
+
+        List<Receipt> receipts = receiptRepository.findAllByParentStatus(status, firstPageWithTwoElements);
+        List<ReceiptDto> receiptDtos = receipts.stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+
+
         return receiptDtos;
     }
 
