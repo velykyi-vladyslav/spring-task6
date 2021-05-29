@@ -15,4 +15,8 @@ public class StatusDto {
 
     public StatusDto() {
     }
+
+    public StatusDto(@NonNull String name) {
+        this.name = name;
+    }
 }

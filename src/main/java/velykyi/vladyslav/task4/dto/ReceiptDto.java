@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NonNull;
+import velykyi.vladyslav.task4.model.Status;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -19,11 +20,14 @@ public class ReceiptDto {
     @JsonSerialize(using = BillSerializer.class)
     private BigDecimal bill;
     //todo Employee
+    private StatusDto parentStatus;
 
     public ReceiptDto() {
     }
 
-    public ReceiptDto(@NonNull BigDecimal bill) {
+    public ReceiptDto(Long id, @NonNull BigDecimal bill, StatusDto parentStatus) {
+        this.id = id;
         this.bill = bill;
+        this.parentStatus = parentStatus;
     }
 }

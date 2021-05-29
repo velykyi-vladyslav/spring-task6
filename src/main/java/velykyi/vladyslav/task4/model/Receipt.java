@@ -15,4 +15,7 @@ public class Receipt {
     @Column(columnDefinition = "decimal not null default 0.00")
     private BigDecimal bill;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status parentStatus;
 }

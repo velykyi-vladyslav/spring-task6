@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import velykyi.vladyslav.task4.dto.StatusDto;
 import velykyi.vladyslav.task4.exceptions.StatusNotFoundException;
 import velykyi.vladyslav.task4.model.Status;
+import velykyi.vladyslav.task4.model.enums.Statuses;
 import velykyi.vladyslav.task4.repository.StatusRepository;
 import velykyi.vladyslav.task4.service.StatusService;
 import velykyi.vladyslav.task4.service.mapper.StatusMapper;
@@ -27,11 +28,13 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Status getStatus(String name) {
-        log.info("getStatus by name: {}", name);
+    public Status getStatus(Statuses status) {
+        log.info("getStatus by name: {}", status.get());
 
-        return statusRepository.findByName(name).orElseThrow(StatusNotFoundException::new);
+        return statusRepository.findByName(status.get())
+                .orElseThrow(StatusNotFoundException::new);
     }
+
 
     private StatusDto map(Status status) {
         log.info("Mapping [Status] to [StatusDTO]");

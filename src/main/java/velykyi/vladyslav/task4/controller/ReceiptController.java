@@ -2,71 +2,90 @@ package velykyi.vladyslav.task4.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import velykyi.vladyslav.task4.controller.assembler.ReceiptAssembler;
-import velykyi.vladyslav.task4.controller.assembler.RoleAssembler;
 import velykyi.vladyslav.task4.controller.model.ReceiptModel;
-import velykyi.vladyslav.task4.controller.model.RoleModel;
 import velykyi.vladyslav.task4.dto.ReceiptDto;
-import velykyi.vladyslav.task4.dto.RoleDto;
 import velykyi.vladyslav.task4.model.Receipt;
 import velykyi.vladyslav.task4.service.ReceiptService;
-import velykyi.vladyslav.task4.service.RoleService;
 import velykyi.vladyslav.task4.service.mapper.ReceiptMapper;
-import velykyi.vladyslav.task4.service.mapper.RoleMapper;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping("api/v1/receipts")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReceiptController {
     private final ReceiptService receiptService;
     private final ReceiptAssembler receiptAssembler;
-    private ReceiptMapper mapper = Mappers.getMapper(ReceiptMapper.class);
+    private final ReceiptMapper receiptMapper;
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public ReceiptModel createReceipt() {
+        Receipt receipt = receiptService.createNewReceipt();
+
+        return receiptAssembler.toModel(map(receipt));
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{id}")
     public ReceiptModel getReceipt(@PathVariable Long id) {
-        log.info("Get receipt by id: " + id);
-        ReceiptDto receiptDto = receiptService.getReceiptDtoById(id);
+        Receipt receipt = receiptService.getReceiptById(id);
 
-        return receiptAssembler.toModel(receiptDto);
+        return receiptAssembler.toModel(map(receipt));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public ReceiptModel createReceipt(@Valid @RequestBody ReceiptDto receiptDto) {
-        log.info("Create receipt: {}", receiptDto);
-        ReceiptDto receipt = receiptService.createReceipt(receiptDto);
-
-        return receiptAssembler.toModel(receipt);
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/status/{status}/{page}")
+    public List<ReceiptModel> getReceipts(@PathVariable String status, @PathVariable int page) {
+        List<Receipt> receipts = receiptService.getReceipts(status.toUpperCase(), page);
+        return receipts.stream()
+                .map(this::map)
+                .map(receiptAssembler::toModel)
+                .collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{id}")
     public ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody ReceiptDto receiptDto) {
-        log.info("Update receipt: {}", receiptDto + " by id: " + id);
-        ReceiptDto receipt = receiptService.updateReceipt(id, receiptDto);
+        //todo do logic when table receipt-product will be exist
 
-        return receiptAssembler.toModel(receipt);
+        Receipt receipt = receiptService.updateReceipt(id, map(receiptDto));
+        return receiptAssembler.toModel(map(receipt));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteReceipt(@Valid @PathVariable Long id) {
-        log.info("Delete receipt by id: " + id);
         receiptService.deleteReceipt(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping(value = "/close/{id}")
+    public ReceiptModel closeReceipt(@PathVariable Long id) {
+        Receipt receipt = receiptService.closeReceipt(id);
+
+        return receiptAssembler.toModel(map(receipt));
+    }
+
+    private Receipt map(ReceiptDto receiptDto) {
+        return receiptMapper.receiptDtoToReceipt(receiptDto);
+    }
+
+    private ReceiptDto map(Receipt receipt) {
+        return receiptMapper.receiptToReceiptDto(receipt);
     }
 
     @InitBinder

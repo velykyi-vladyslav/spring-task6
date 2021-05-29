@@ -1,21 +1,26 @@
 package velykyi.vladyslav.task4.service;
 
-import velykyi.vladyslav.task4.dto.EmployeeDto;
-import velykyi.vladyslav.task4.dto.ReceiptDto;
+import velykyi.vladyslav.task4.model.Employee;
 import velykyi.vladyslav.task4.model.Receipt;
 
+import java.util.List;
+
 public interface ReceiptService {
-    ReceiptDto getReceiptDtoById(Long id);
+    Receipt getReceiptById(Long id);
 
-    ReceiptDto getReceiptDtoByEmployee(EmployeeDto employeeDto);
+    Receipt getReceiptByEmployee(Employee employee);
 
-    ReceiptDto getReceiptDtoByStatus(ReceiptDto receiptDto);
 
     Receipt getReceipt(Long id);
 
-    ReceiptDto createReceipt(ReceiptDto receiptDto);
+    List<Receipt> getReceipts(String statusName, int page);
+
+    Receipt createNewReceipt();
 
     void deleteReceipt(Long id);
 
-    ReceiptDto updateReceipt(Long id, ReceiptDto receiptDto);
+    Receipt updateReceipt(Long id, Receipt receipt);
+
+
+    Receipt closeReceipt(Long id);
 }
